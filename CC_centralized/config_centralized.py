@@ -14,7 +14,7 @@ class CentralizedConfig:
     """Configuration class for centralized training"""
     
     # Data Configuration
-    data_path: str = "D:/Ascl_Mimic_Data/CC_Kaggle_Datasets"
+    data_path: str = "path/your datasets path"
     dataset_name: str = "SiPaKMeD"
     image_size: Tuple[int, int] = (224, 224)
     num_channels: int = 3
