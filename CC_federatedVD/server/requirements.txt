@@ -1,0 +1,7 @@
+flwr
+torch
+opencv-python
+scikit-learn
+pandas
+numpy
+torchvision

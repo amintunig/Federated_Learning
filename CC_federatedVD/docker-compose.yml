@@ -1,0 +1,62 @@
+version: '3.8'
+
+networks:
+  flower_network:
+    driver: bridge
+
+services:
+  server:
+    container_name: fl_server11
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    command: python -m server.server
+    ports:
+      - "8083:8084"
+    volumes:
+      - ./server:/app/server
+      - ./model:/app/model
+      - ./config.py:/app/config.py
+      - ./preprocessed_data:/app/preprocessed_data
+    networks:
+      - flower_network
+
+  client1:
+    container_name: fl_client11
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    # Revert the command to the simple, correct version
+    command: python -m client.client --cid=1
+    environment:
+      # This environment variable is now used by client.py
+      - FL_SERVER_ADDRESS=server:8084
+    volumes:
+      - ./client:/app/client
+      - ./model:/app/model
+      - ./config.py:/app/config.py
+      - ./preprocessed_data:/app/preprocessed_data
+    depends_on:
+      - server
+    networks:
+      - flower_network
+
+  client2:
+    container_name: fl_client21
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    # Revert the command to the simple, correct version
+    command: python -m client.client --cid=2
+    environment:
+      # This environment variable is now used by client.py
+      - FL_SERVER_ADDRESS=server:8084
+    volumes:
+      - ./client:/app/client
+      - ./model:/app/model
+      - ./config.py:/app/config.py
+      - ./preprocessed_data:/app/preprocessed_data
+    depends_on:
+      - server
+    networks:
+      - flower_network
