@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  server:
+    build: .
+    command: python server.py
+    ports:
+      - "8084:8084"  # Flower server port
+
+  client1:
+    build: .
+    command: python client.py --partition=1
+    depends_on:
+      - server
+
+  client2:
+    build: .
+    command: python client.py --partition=2
+    depends_on:
+      - server
+
+  client3:
+    build: .
+    command: python client.py --partition=3
+    depends_on:
+      - server
