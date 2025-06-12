@@ -1,0 +1,36 @@
+version: '3.12'
+
+services:
+  server:
+    build: .
+    ports:
+      - "8086:8085"
+    networks:
+      - fl-network
+
+  client1:
+    build: .
+    command: python client1.py --partition=0
+    depends_on:
+      - server
+    networks:
+      - fl-network
+
+  client2:
+    build: .
+    command: python client1.py --partition=1
+    depends_on:
+      - server
+    networks:
+      - fl-network
+
+  client3:
+    build: .
+    command: python client1.py --partition=2
+    depends_on:
+      - server
+    networks:
+      - fl-network
+
+networks:
+  fl-network:

@@ -1,0 +1,13 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Install necessary dependencies
+RUN pip install --upgrade pip
+RUN pip install flwr==1.17.0 torch torchvision
+
+# Copy your application code
+COPY . .
+
+# Set the default command
+CMD ["python", "server1.py"]
