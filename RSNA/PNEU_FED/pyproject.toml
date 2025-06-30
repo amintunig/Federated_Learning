@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "pneumonia-fl"
+version = "0.1.0"
+description = "Pneumonia Federated Learning Project"
+dependencies = [
+    "numpy",
+    "torch",
+    "torchvision",
+    "pandas",
+    "scikit-learn",
+    "matplotlib",
+    "Pillow",
+    "pydicom",
+    "flwr",
+    "grpcio",
+    "protobuf",
+    "pydicom"
+]
+
+[tool.setuptools.packages.find]
+where = ["pneumonia-fl"]

@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: skincancer-server
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    image: skincancer-server:latest
+    command: python server/server.py
+    ports:
+      - "8098:8098"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - "D:/Ascl_Mimic_Data/SkinCancerMNIST:/app/data"
+    networks:
+      - fl-net
+
+  client1:
+    container_name: skincancer-client1
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    image: skincancer-client1:latest
+    command: python client/client.py stat_bal_class_bal 0
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8098
+    volumes:
+      - "D:/Ascl_Mimic_Data/SkinCancerMNIST:/app/data"
+    networks:
+      - fl-net
+
+  client2:
+    container_name: skincancer-client2
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    image: skincancer-client2:latest
+    command: python client/client.py stat_bal_class_bal 1
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8098
+    volumes:
+      - "D:/Ascl_Mimic_Data/SkinCancerMNIST:/app/data"
+    networks:
+      - fl-net
+
+  client3:
+    container_name: skincancer-client3
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    image: skincancer-client3:latest
+    command: python client/client.py stat_bal_class_bal 2
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8098
+    volumes:
+      - "D:/Ascl_Mimic_Data/SkinCancerMNIST:/app/data"
+    networks:
+      - fl-net
+
+networks:
+  fl-net:
+    driver: bridge

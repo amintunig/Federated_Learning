@@ -1,0 +1,55 @@
+name: pneumonia-fl
+services:
+  server:
+    build:
+      context: .           # ✅ This is the pneumonia-fl directory
+      dockerfile: server/Dockerfile
+    container_name: pneumonia-server
+    command: python server/server.py
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./:/app"
+      - "D:/Ascl_Mimic_Data/RSNA:/app/data"
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - fl-net
+
+  client1:
+    build:
+      context: .           # ✅ Same directory
+      dockerfile: client/Dockerfile
+    container_name: pneumonia-client1
+    command: python client/client.py --cid 0 --img_dir /app/data --train_file /app/data/stage2_train_metadata.csv --val_file /app/data/stage2_test_metadata.csv --server_address server:8080
+    depends_on:
+      - server
+    volumes:
+      - "./:/app"
+      - "D:/Ascl_Mimic_Data/RSNA:/app/data"
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8080
+    networks:
+      - fl-net
+
+  client2:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: pneumonia-client2
+    command: python client/client.py --cid 1 --img_dir /app/data --train_file /app/data/stage2_train_metadata.csv --val_file /app/data/stage2_test_metadata.csv --server_address server:8080
+    depends_on:
+      - server
+    volumes:
+      - "./:/app"
+      - "D:/Ascl_Mimic_Data/RSNA:/app/data"
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8080
+    networks:
+      - fl-net
+
+networks:
+  fl-net:
+    driver: bridge
