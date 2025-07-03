@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: fl-server
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    image: fl-server:latest
+    command: python server/server.py
+    ports:
+      - "8085:8085"
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - fl-net
+
+  client1:
+    container_name: fl-client1
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    image: fl-client1:latest
+    command: python client/client.py
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8085
+    volumes:
+        - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1/CR_1:/app/data"
+        - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1_metadata_CR1.csv:/app/data/metadata.csv"
+    networks:
+      - fl-net
+
+  client2:
+    container_name: fl-client2
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    image: fl-client2:latest
+    command: python client/client.py
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8085
+    volumes:
+         - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1/CR_2:/app/data"
+         - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1_metadata_CR2.csv:/app/data/metadata.csv"
+    networks:
+      - fl-net
+
+  client3:
+    container_name: fl-client3
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    image: fl-client3:latest
+    command: python client/client.py
+    depends_on:
+      - server
+    environment:
+      - PYTHONPATH=/app
+      - SERVER_ADDRESS=server:8085
+    volumes:
+      - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1/CR_3:/app/data"
+      - "D:/Ascl_Mimic_Data/NEW_EXP/Ex1_metadata_CR3.csv:/app/data/metadata.csv"
+    networks:
+      - fl-net
+
+networks:
+  fl-net:
+    driver: bridge

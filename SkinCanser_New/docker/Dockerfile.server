@@ -1,0 +1,22 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+COPY . /app
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+
+# Copy everything into /app
+COPY ./model ./model
+COPY ./client ./client
+COPY ./server ./server
+
+# Optionally: install requirements
+# COPY requirements.txt .
+# RUN pip install -r requirements.txt
+
+# Make sure Python can find the root directory
+ENV PYTHONPATH=/app
+
+# Run server
+CMD ["python", "server/server.py"]
